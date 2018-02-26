@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Speech/Speech.h>
 
 //! Project version number for SpeechRecognizerButton.
 FOUNDATION_EXPORT double SpeechRecognizerButtonVersionNumber;
