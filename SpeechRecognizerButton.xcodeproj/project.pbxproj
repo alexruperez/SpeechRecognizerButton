@@ -20,6 +20,7 @@
 		814DED782044306F00DCDDE0 /* SpeechRecognizerButton.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 814DED3520442E4000DCDDE0 /* SpeechRecognizerButton.framework */; };
 		814DED792044306F00DCDDE0 /* SpeechRecognizerButton.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 814DED3520442E4000DCDDE0 /* SpeechRecognizerButton.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		814DED7D2044332A00DCDDE0 /* SpeechRecognizerButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 814DED3820442E4000DCDDE0 /* SpeechRecognizerButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D5F5C13C204571D400F11B18 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5F5C13B204571D400F11B18 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,9 @@
 		814DED6B2044305F00DCDDE0 /* ExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		814DED6F2044306000DCDDE0 /* ExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleUITests.swift; sourceTree = "<group>"; };
 		814DED712044306000DCDDE0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D5F5C13B204571D400F11B18 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		D5F5C13F2045953A00F11B18 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
+		D5F5C1402045953B00F11B18 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5F5C13C204571D400F11B18 /* AVFoundation.framework in Frameworks */,
 				814DED5120442E5700DCDDE0 /* Speech.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -161,6 +166,7 @@
 		814DED4F20442E5700DCDDE0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D5F5C13B204571D400F11B18 /* AVFoundation.framework */,
 				814DED5020442E5700DCDDE0 /* Speech.framework */,
 			);
 			name = Frameworks;
@@ -415,6 +421,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				814DED5F2044305F00DCDDE0 /* Base */,
+				D5F5C13F2045953A00F11B18 /* es */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -423,6 +430,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				814DED642044305F00DCDDE0 /* Base */,
+				D5F5C1402045953B00F11B18 /* es */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -434,6 +442,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -459,6 +468,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "$(DYLIB_CURRENT_VERSION)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -496,6 +506,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -521,6 +532,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "$(DYLIB_CURRENT_VERSION)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -581,6 +593,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = Q6BEQCNWYM;
 				INFOPLIST_FILE = SpeechRecognizerButtonTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexruperez.SpeechRecognizerButtonTests;
@@ -592,6 +605,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = Q6BEQCNWYM;
 				INFOPLIST_FILE = SpeechRecognizerButtonTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexruperez.SpeechRecognizerButtonTests;
@@ -604,6 +618,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = Q6BEQCNWYM;
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexruperez.SpeechRecognizerButton.Example;
@@ -616,6 +631,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = Q6BEQCNWYM;
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexruperez.SpeechRecognizerButton.Example;
@@ -627,6 +643,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = Q6BEQCNWYM;
 				INFOPLIST_FILE = ExampleUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexruperez.SpeechRecognizerButton.ExampleUITests;
@@ -639,6 +656,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = Q6BEQCNWYM;
 				INFOPLIST_FILE = ExampleUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexruperez.SpeechRecognizerButton.ExampleUITests;

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
 #import <Speech/Speech.h>
 
 //! Project version number for SpeechRecognizerButton.
@@ -14,7 +15,3 @@ FOUNDATION_EXPORT double SpeechRecognizerButtonVersionNumber;
 
 //! Project version string for SpeechRecognizerButton.
 FOUNDATION_EXPORT const unsigned char SpeechRecognizerButtonVersionString[];
-
-// In this header, you should import all the public headers of your framework using statements like #import <SpeechRecognizerButton/PublicHeader.h>
-
-
