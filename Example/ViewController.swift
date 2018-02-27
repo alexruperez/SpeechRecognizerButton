@@ -20,13 +20,10 @@ class ViewController: UIViewController {
         button.authorizationErrorHandling = .openSettings(completion: nil)
         button.resultHandler = {
             self.label.text = $1?.bestTranscription.formattedString
+            self.button.play()
         }
         button.errorHandler = {
-            if let error = $0 {
-                self.label.text = error.localizedDescription
-            } else {
-                self.label.text = "Unknown error."
-            }
+            self.label.text = $0?.localizedDescription
         }
     }
 
