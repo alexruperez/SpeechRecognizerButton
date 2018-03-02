@@ -42,11 +42,15 @@ import Speech
                                                       AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
     public var maxDuration = TimeInterval(60)
     public var locale = Locale.autoupdatingCurrent
-    public var defaultTaskHint = SFSpeechRecognitionTaskHint.unspecified
+    public var taskHint = SFSpeechRecognitionTaskHint.unspecified
     public var queue = OperationQueue.main
+    public var contextualStrings = [String]()
+    public var interactionIdentifier: String?
+    public let waveformView = SFWaveformView()
 
     private var audioPlayer: AVAudioPlayer?
     private var audioRecorder: AVAudioRecorder?
+    private var displayLink: CADisplayLink?
     private var speechRecognizer: SFSpeechRecognizer?
     private var speechRecognitionTask: SFSpeechRecognitionTask?
     private let microphoneUsageDescriptionKey = UsageDescriptionKey("NSMicrophoneUsageDescription")
@@ -63,9 +67,13 @@ import Speech
     }
 
     private func initialize() {
-        addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
-        addTarget(self, action: #selector(touchUpInside(_:)), for: .touchUpInside)
-        addTarget(self, action: #selector(touchUpOutside(_:)), for: .touchUpOutside)
+        addTarget(self, action: #selector(self.touchDown(_:)), for: .touchDown)
+        addTarget(self, action: #selector(self.touchUpInside(_:)), for: .touchUpInside)
+        addTarget(self, action: #selector(self.touchUpOutside(_:)), for: .touchUpOutside)
+    }
+
+    deinit {
+        displayLink?.invalidate()
     }
 
     @objc private func touchDown(_ sender: Any? = nil) {
@@ -79,6 +87,8 @@ import Speech
                     if self.audioRecorder == nil {
                         self.audioRecorder = try AVAudioRecorder(url: self.recordURL, settings: self.audioFormatSettings)
                         self.audioRecorder?.delegate = self
+                        self.audioRecorder?.isMeteringEnabled = true
+                        self.audioRecorder?.prepareToRecord()
                     }
                     try self.audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
                     try self.audioSession.setActive(true)
@@ -90,17 +100,36 @@ import Speech
                 OperationQueue.main.addOperation {
                     if self.audioRecorder?.isRecording == false, self.isHighlighted {
                         self.audioRecorder?.record(forDuration: self.maxDuration)
+                        if self.displayLink == nil {
+                            self.displayLink = CADisplayLink(target: self, selector: #selector(self.updateMeters(_:)))
+                            self.displayLink?.add(to: .current, forMode: .commonModes)
+                        }
+                        self.displayLink?.isPaused = false
+                        if self.waveformView.superview == nil {
+                            self.superview?.addSubview(self.waveformView)
+                        }
                     }
                 }
             }
         }
     }
 
+    @objc private func updateMeters(_ sender: Any? = nil) {
+        audioRecorder?.updateMeters()
+        guard let averagePower = audioRecorder?.averagePower(forChannel: 0) else {
+            return
+        }
+        let normalizedValue = pow(10, averagePower / 20)
+        waveformView.updateWithLevel(CGFloat(normalizedValue))
+    }
+
     @objc private func touchUpInside(_ sender: Any? = nil) {
+        displayLink?.isPaused = true
         audioRecorder?.stop()
     }
 
     @objc private func touchUpOutside(_ sender: Any? = nil) {
+        displayLink?.isPaused = true
         audioRecorder?.stop()
         audioRecorder?.deleteRecording()
     }
@@ -231,7 +260,7 @@ extension SFButton: AVAudioRecorderDelegate {
                             }
                             return
                         }
-                        speechRecognizer.defaultTaskHint = self.defaultTaskHint
+                        speechRecognizer.defaultTaskHint = self.taskHint
                         speechRecognizer.queue = self.queue
                         self.speechRecognizer = speechRecognizer
                     }
@@ -250,6 +279,8 @@ extension SFButton: AVAudioRecorderDelegate {
                             return
                         }
                         let speechRecognitionRequest = SFSpeechURLRecognitionRequest(url: self.recordURL)
+                        speechRecognitionRequest.contextualStrings = self.contextualStrings
+                        speechRecognitionRequest.interactionIdentifier = self.interactionIdentifier
                         self.speechRecognitionTask = self.speechRecognizer?.recognitionTask(with: speechRecognitionRequest, resultHandler: { result, error in
                             if let result = result, result.isFinal {
                                 self.queue.addOperation {

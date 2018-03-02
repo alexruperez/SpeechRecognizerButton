@@ -20,6 +20,7 @@
 		814DED782044306F00DCDDE0 /* SpeechRecognizerButton.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 814DED3520442E4000DCDDE0 /* SpeechRecognizerButton.framework */; };
 		814DED792044306F00DCDDE0 /* SpeechRecognizerButton.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 814DED3520442E4000DCDDE0 /* SpeechRecognizerButton.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		814DED7D2044332A00DCDDE0 /* SpeechRecognizerButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 814DED3820442E4000DCDDE0 /* SpeechRecognizerButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D557879B204968A200B88855 /* SFWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D557879A204968A200B88855 /* SFWaveformView.swift */; };
 		D5F5C13C204571D400F11B18 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5F5C13B204571D400F11B18 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -80,6 +81,7 @@
 		814DED6B2044305F00DCDDE0 /* ExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		814DED6F2044306000DCDDE0 /* ExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleUITests.swift; sourceTree = "<group>"; };
 		814DED712044306000DCDDE0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D557879A204968A200B88855 /* SFWaveformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFWaveformView.swift; sourceTree = "<group>"; };
 		D5F5C13B204571D400F11B18 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D5F5C13F2045953A00F11B18 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
 		D5F5C1402045953B00F11B18 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				814DED5220442FBA00DCDDE0 /* SFButton.swift */,
+				D557879A204968A200B88855 /* SFWaveformView.swift */,
 				814DED3820442E4000DCDDE0 /* SpeechRecognizerButton.h */,
 				814DED3920442E4000DCDDE0 /* Info.plist */,
 			);
@@ -367,6 +370,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D557879B204968A200B88855 /* SFWaveformView.swift in Sources */,
 				814DED5320442FBA00DCDDE0 /* SFButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
