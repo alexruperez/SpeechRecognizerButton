@@ -10,7 +10,7 @@
 
 UIButton subclass with push to talk recording, speech recognition and Siri-style waveform view.
 
-![SpeechRecognizerButton](https://raw.githubusercontent.com/alexruperez/SpeechRecognizerButton/master/SpeechRecognizerButton.gif)
+![SpeechRecognizerButton](https://github.com/alexruperez/SpeechRecognizerButton/raw/master/SpeechRecognizerButton.gif)
 
 ## 📲 Installation
 
