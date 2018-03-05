@@ -46,7 +46,8 @@ import Speech
     public var queue = OperationQueue.main
     public var contextualStrings = [String]()
     public var interactionIdentifier: String?
-    public let waveformView = SFWaveformView()
+    public var animationDuration = TimeInterval(0.5)
+    @IBOutlet weak var waveformView: SFWaveformView?
 
     private var audioPlayer: AVAudioPlayer?
     private var audioRecorder: AVAudioRecorder?
@@ -70,6 +71,11 @@ import Speech
         addTarget(self, action: #selector(self.touchDown(_:)), for: .touchDown)
         addTarget(self, action: #selector(self.touchUpInside(_:)), for: .touchUpInside)
         addTarget(self, action: #selector(self.touchUpOutside(_:)), for: .touchUpOutside)
+    }
+
+    public override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        waveformView(show: false, animationDuration: 0)
     }
 
     deinit {
@@ -105,12 +111,20 @@ import Speech
                             self.displayLink?.add(to: .current, forMode: .commonModes)
                         }
                         self.displayLink?.isPaused = false
-                        if self.waveformView.superview == nil {
-                            self.superview?.addSubview(self.waveformView)
-                        }
+                        self.waveformView(show: true, animationDuration: self.animationDuration)
                     }
                 }
             }
+        }
+    }
+
+    open func waveformView(show: Bool, animationDuration: TimeInterval) {
+        if animationDuration > 0 {
+            UIView.animate(withDuration: animationDuration, animations: {
+                self.waveformView?.alpha = show ? 1 : 0
+            })
+        } else {
+            waveformView?.alpha = show ? 1 : 0
         }
     }
 
@@ -120,18 +134,20 @@ import Speech
             return
         }
         let normalizedValue = pow(10, averagePower / 20)
-        waveformView.updateWithLevel(CGFloat(normalizedValue))
+        waveformView?.updateWithLevel(CGFloat(normalizedValue))
     }
 
     @objc private func touchUpInside(_ sender: Any? = nil) {
         displayLink?.isPaused = true
         audioRecorder?.stop()
+        waveformView(show: false, animationDuration: animationDuration)
     }
 
     @objc private func touchUpOutside(_ sender: Any? = nil) {
         displayLink?.isPaused = true
         audioRecorder?.stop()
         audioRecorder?.deleteRecording()
+        waveformView(show: false, animationDuration: animationDuration)
     }
 
     private func handleAuthorizationError(_ error: SFButtonError, _ handling: AuthorizationErrorHandling) {

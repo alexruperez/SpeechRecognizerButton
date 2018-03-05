@@ -21,6 +21,7 @@
 		814DED792044306F00DCDDE0 /* SpeechRecognizerButton.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 814DED3520442E4000DCDDE0 /* SpeechRecognizerButton.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		814DED7D2044332A00DCDDE0 /* SpeechRecognizerButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 814DED3820442E4000DCDDE0 /* SpeechRecognizerButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D557879B204968A200B88855 /* SFWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D557879A204968A200B88855 /* SFWaveformView.swift */; };
+		D557879D204D695C00B88855 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D557879C204D695C00B88855 /* UIKit.framework */; };
 		D5F5C13C204571D400F11B18 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5F5C13B204571D400F11B18 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +83,7 @@
 		814DED6F2044306000DCDDE0 /* ExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleUITests.swift; sourceTree = "<group>"; };
 		814DED712044306000DCDDE0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D557879A204968A200B88855 /* SFWaveformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFWaveformView.swift; sourceTree = "<group>"; };
+		D557879C204D695C00B88855 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D5F5C13B204571D400F11B18 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D5F5C13F2045953A00F11B18 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
 		D5F5C1402045953B00F11B18 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D557879D204D695C00B88855 /* UIKit.framework in Frameworks */,
 				D5F5C13C204571D400F11B18 /* AVFoundation.framework in Frameworks */,
 				814DED5120442E5700DCDDE0 /* Speech.framework in Frameworks */,
 			);
@@ -169,6 +172,7 @@
 		814DED4F20442E5700DCDDE0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D557879C204D695C00B88855 /* UIKit.framework */,
 				D5F5C13B204571D400F11B18 /* AVFoundation.framework */,
 				814DED5020442E5700DCDDE0 /* Speech.framework */,
 			);
