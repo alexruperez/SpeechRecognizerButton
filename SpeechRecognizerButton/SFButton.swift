@@ -47,7 +47,7 @@ import Speech
     public var contextualStrings = [String]()
     public var interactionIdentifier: String?
     public var animationDuration = TimeInterval(0.5)
-    @IBOutlet weak var waveformView: SFWaveformView?
+    @IBOutlet public weak var waveformView: SFWaveformView?
 
     private var audioPlayer: AVAudioPlayer?
     private var audioRecorder: AVAudioRecorder?
