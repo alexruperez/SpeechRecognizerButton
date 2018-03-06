@@ -9,8 +9,10 @@
 import UIKit
 import AVFoundation
 import Speech
+import AudioToolbox
 
-@IBDesignable public class SFButton: UIButton {
+@IBDesignable
+public class SFButton: UIButton {
 
     public enum SFButtonError: Error {
         public enum AuthorizationReason {
@@ -40,13 +42,15 @@ import Speech
                                                       AVSampleRateKey: 12000,
                                                       AVNumberOfChannelsKey: 1,
                                                       AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
-    public var maxDuration = TimeInterval(60)
+    @IBInspectable public var maxDuration: Double = 60
     public var locale = Locale.autoupdatingCurrent
     public var taskHint = SFSpeechRecognitionTaskHint.unspecified
     public var queue = OperationQueue.main
     public var contextualStrings = [String]()
     public var interactionIdentifier: String?
-    public var animationDuration = TimeInterval(0.5)
+    @IBInspectable public var animationDuration: Double = 0.5
+    @IBInspectable public var shouldVibrate: Bool = true
+    @IBInspectable public var shouldSound: Bool = true
     @IBOutlet public weak var waveformView: SFWaveformView?
 
     private var audioPlayer: AVAudioPlayer?
@@ -89,32 +93,61 @@ import Speech
                     self.handleAuthorizationError(error, self.authorizationErrorHandling)
                 }
             } else {
-                do {
-                    if self.audioRecorder == nil {
+                if self.audioRecorder == nil {
+                    do {
                         self.audioRecorder = try AVAudioRecorder(url: self.recordURL, settings: self.audioFormatSettings)
-                        self.audioRecorder?.delegate = self
-                        self.audioRecorder?.isMeteringEnabled = true
-                        self.audioRecorder?.prepareToRecord()
+                    } catch {
+                        self.queue.addOperation {
+                            self.errorHandler?(.unknown(error: error))
+                        }
                     }
-                    try self.audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
-                    try self.audioSession.setActive(true)
-                } catch {
-                    self.queue.addOperation {
-                        self.errorHandler?(.unknown(error: error))
-                    }
+                    self.audioRecorder?.delegate = self
+                    self.audioRecorder?.isMeteringEnabled = true
+                    self.audioRecorder?.prepareToRecord()
                 }
                 OperationQueue.main.addOperation {
                     if self.audioRecorder?.isRecording == false, self.isHighlighted {
-                        self.audioRecorder?.record(forDuration: self.maxDuration)
-                        if self.displayLink == nil {
-                            self.displayLink = CADisplayLink(target: self, selector: #selector(self.updateMeters(_:)))
-                            self.displayLink?.add(to: .current, forMode: .commonModes)
+                        if self.shouldVibrate {
+                            AudioServicesPlaySystemSound(1519)
                         }
-                        self.displayLink?.isPaused = false
-                        self.waveformView(show: true, animationDuration: self.animationDuration)
+                        if self.shouldSound {
+                            AudioServicesPlaySystemSoundWithCompletion(1113, {
+                                OperationQueue.main.addOperation {
+                                    self.beginRecord()
+                                }
+                            })
+                        } else {
+                            self.beginRecord()
+                        }
                     }
                 }
             }
+        }
+    }
+
+    private func beginRecord() {
+        try? audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+        try? audioSession.setActive(true)
+        audioRecorder?.record(forDuration: maxDuration)
+        if displayLink == nil {
+            displayLink = CADisplayLink(target: self, selector: #selector(self.updateMeters(_:)))
+            displayLink?.add(to: .current, forMode: .commonModes)
+        }
+        displayLink?.isPaused = false
+        waveformView(show: true, animationDuration: self.animationDuration)
+    }
+
+    private func endRecord() {
+        displayLink?.isPaused = true
+        audioRecorder?.stop()
+        waveformView(show: false, animationDuration: animationDuration)
+        try? audioSession.setCategory(AVAudioSessionCategoryPlayback)
+        try? audioSession.setActive(true)
+        if self.shouldVibrate {
+            AudioServicesPlaySystemSound(1519)
+        }
+        if self.shouldSound {
+            AudioServicesPlaySystemSound(1114)
         }
     }
 
@@ -138,16 +171,12 @@ import Speech
     }
 
     @objc private func touchUpInside(_ sender: Any? = nil) {
-        displayLink?.isPaused = true
-        audioRecorder?.stop()
-        waveformView(show: false, animationDuration: animationDuration)
+        endRecord()
     }
 
     @objc private func touchUpOutside(_ sender: Any? = nil) {
-        displayLink?.isPaused = true
-        audioRecorder?.stop()
+        endRecord()
         audioRecorder?.deleteRecording()
-        waveformView(show: false, animationDuration: animationDuration)
     }
 
     private func handleAuthorizationError(_ error: SFButtonError, _ handling: AuthorizationErrorHandling) {

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		814DED3F20442E4100DCDDE0 /* SpeechRecognizerButton.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 814DED3520442E4000DCDDE0 /* SpeechRecognizerButton.framework */; };
-		814DED4420442E4100DCDDE0 /* SpeechRecognizerButtonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814DED4320442E4100DCDDE0 /* SpeechRecognizerButtonTests.swift */; };
+		814DED4420442E4100DCDDE0 /* SFWaveformViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814DED4320442E4100DCDDE0 /* SFWaveformViewTests.swift */; };
 		814DED5120442E5700DCDDE0 /* Speech.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 814DED5020442E5700DCDDE0 /* Speech.framework */; };
 		814DED5320442FBA00DCDDE0 /* SFButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814DED5220442FBA00DCDDE0 /* SFButton.swift */; };
 		814DED5B2044305F00DCDDE0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814DED5A2044305F00DCDDE0 /* AppDelegate.swift */; };
@@ -22,6 +22,7 @@
 		814DED7D2044332A00DCDDE0 /* SpeechRecognizerButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 814DED3820442E4000DCDDE0 /* SpeechRecognizerButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D557879B204968A200B88855 /* SFWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D557879A204968A200B88855 /* SFWaveformView.swift */; };
 		D557879D204D695C00B88855 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D557879C204D695C00B88855 /* UIKit.framework */; };
+		D557879F204EBAEB00B88855 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D557879E204EBAEB00B88855 /* AudioToolbox.framework */; };
 		D5F5C13C204571D400F11B18 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5F5C13B204571D400F11B18 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -68,7 +69,7 @@
 		814DED3820442E4000DCDDE0 /* SpeechRecognizerButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpeechRecognizerButton.h; sourceTree = "<group>"; };
 		814DED3920442E4000DCDDE0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		814DED3E20442E4100DCDDE0 /* SpeechRecognizerButtonTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpeechRecognizerButtonTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		814DED4320442E4100DCDDE0 /* SpeechRecognizerButtonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizerButtonTests.swift; sourceTree = "<group>"; };
+		814DED4320442E4100DCDDE0 /* SFWaveformViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFWaveformViewTests.swift; sourceTree = "<group>"; };
 		814DED4520442E4100DCDDE0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		814DED5020442E5700DCDDE0 /* Speech.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Speech.framework; path = System/Library/Frameworks/Speech.framework; sourceTree = SDKROOT; };
 		814DED5220442FBA00DCDDE0 /* SFButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFButton.swift; sourceTree = "<group>"; };
@@ -84,6 +85,7 @@
 		814DED712044306000DCDDE0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D557879A204968A200B88855 /* SFWaveformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFWaveformView.swift; sourceTree = "<group>"; };
 		D557879C204D695C00B88855 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		D557879E204EBAEB00B88855 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		D5F5C13B204571D400F11B18 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D5F5C13F2045953A00F11B18 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
 		D5F5C1402045953B00F11B18 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D557879F204EBAEB00B88855 /* AudioToolbox.framework in Frameworks */,
 				D557879D204D695C00B88855 /* UIKit.framework in Frameworks */,
 				D5F5C13C204571D400F11B18 /* AVFoundation.framework in Frameworks */,
 				814DED5120442E5700DCDDE0 /* Speech.framework in Frameworks */,
@@ -163,7 +166,7 @@
 		814DED4220442E4100DCDDE0 /* SpeechRecognizerButtonTests */ = {
 			isa = PBXGroup;
 			children = (
-				814DED4320442E4100DCDDE0 /* SpeechRecognizerButtonTests.swift */,
+				814DED4320442E4100DCDDE0 /* SFWaveformViewTests.swift */,
 				814DED4520442E4100DCDDE0 /* Info.plist */,
 			);
 			path = SpeechRecognizerButtonTests;
@@ -172,6 +175,7 @@
 		814DED4F20442E5700DCDDE0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D557879E204EBAEB00B88855 /* AudioToolbox.framework */,
 				D557879C204D695C00B88855 /* UIKit.framework */,
 				D5F5C13B204571D400F11B18 /* AVFoundation.framework */,
 				814DED5020442E5700DCDDE0 /* Speech.framework */,
@@ -383,7 +387,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				814DED4420442E4100DCDDE0 /* SpeechRecognizerButtonTests.swift in Sources */,
+				814DED4420442E4100DCDDE0 /* SFWaveformViewTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,7 +485,7 @@
 				CURRENT_PROJECT_VERSION = "$(DYLIB_CURRENT_VERSION)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DYLIB_COMPATIBILITY_VERSION = 0.1.0;
-				DYLIB_CURRENT_VERSION = 0.1.0;
+				DYLIB_CURRENT_VERSION = 0.1.1;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -545,7 +549,7 @@
 				CURRENT_PROJECT_VERSION = "$(DYLIB_CURRENT_VERSION)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 0.1.0;
-				DYLIB_CURRENT_VERSION = 0.1.0;
+				DYLIB_CURRENT_VERSION = 0.1.1;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;

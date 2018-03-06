@@ -37,6 +37,14 @@ dependencies: [
 
 ## 🐒 Usage
 
+### Required configuration:
+
+Add `NSMicrophoneUsageDescription` key to your `Info.plist` file containing a description of how your app will use the voice recording.
+
+### Optional configuration:
+
+Add `NSSpeechRecognitionUsageDescription` key to your `Info.plist` file containing a description of how your app will use the transcription only if you want to use this functionality.
+
 ### Handling authorization:
 
 #### Automatically opening Settings when denying permission:
@@ -75,19 +83,21 @@ Just set `weak var waveformView: SFWaveformView?` property or use the Interface 
 
 ### Customizing SFButton configuration:
 
-Just set the following properties by code.
+Just set the following properties by code or use the Interface Builder inspectables.
 
 ```swift
 button.audioSession...
 button.recordURL = ...
-button.audioFormatSettings [AV...Key: ...]
-button.maxDuration = TimeInterval(...)
+button.audioFormatSettings = [AV...Key: ...]
+button.maxDuration = ...
 button.locale = Locale....
 button.taskHint = SFSpeechRecognitionTaskHint....
 button.queue = OperationQueue....
 button.contextualStrings = ["..."]
 button.interactionIdentifier = "..."
-button.animationDuration = TimeInterval(...)
+button.animationDuration = ...
+button.shouldVibrate = ...
+button.shouldSound = ...
 ```
 
 ### Customizing SFWaveformView configuration:

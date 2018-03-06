@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        button.authorizationErrorHandling = .openSettings(completion: nil)
+        //button.authorizationErrorHandling = .openSettings(completion: nil)
         button.resultHandler = {
             self.label.text = $1?.bestTranscription.formattedString
             self.button.play()

@@ -9,15 +9,24 @@
 import XCTest
 
 class ExampleUITests: XCTestCase {
+
+    let app = XCUIApplication()
+    let duration: TimeInterval = 3
         
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        XCUIApplication().launch()
+        app.launch()
     }
     
-    func testSFButton() {
-        XCTFail()
+    func testButton() {
+        app.buttons["Button"].press(forDuration: duration)
+        sleep(UInt32(duration))
+    }
+
+    func testButtonThenDrag() {
+        app.buttons["Button"].press(forDuration: duration, thenDragTo: app.otherElements.firstMatch)
+        sleep(UInt32(duration))
     }
     
 }

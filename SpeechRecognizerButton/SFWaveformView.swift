@@ -13,8 +13,8 @@ let pi = Double.pi
 
 @IBDesignable
 public class SFWaveformView: UIView {
-    fileprivate var _phase: CGFloat = 0.0
-    fileprivate var _amplitude: CGFloat = 0.3
+    fileprivate(set) var _phase: CGFloat = 0.0
+    fileprivate(set) var _amplitude: CGFloat = 0.3
 
     @IBInspectable public var waveColor: UIColor = .black
     @IBInspectable public var numberOfWaves = 5
@@ -38,16 +38,16 @@ public class SFWaveformView: UIView {
     }
 
     override public func draw(_ rect: CGRect) {
-        let context = UIGraphicsGetCurrentContext()!
-        context.clear(bounds)
+        let context = UIGraphicsGetCurrentContext()
+        context?.clear(bounds)
 
         backgroundColor?.set()
-        context.fill(rect)
+        context?.fill(rect)
 
         // Draw multiple sinus waves, with equal phases but altered
         // amplitudes, multiplied by a parable function.
         for waveNumber in 0...numberOfWaves {
-            context.setLineWidth((waveNumber == 0 ? primaryWaveLineWidth : secondaryWaveLineWidth))
+            context?.setLineWidth((waveNumber == 0 ? primaryWaveLineWidth : secondaryWaveLineWidth))
 
             let halfHeight = bounds.height / 2.0
             let width = bounds.width
@@ -71,15 +71,15 @@ public class SFWaveformView: UIView {
                 let y = scaling * maxAmplitude * normedAmplitude * CGFloat(sinf(Float(tempCasting))) + halfHeight
 
                 if x == 0 {
-                    context.move(to: CGPoint(x: x, y: y))
+                    context?.move(to: CGPoint(x: x, y: y))
                 } else {
-                    context.addLine(to: CGPoint(x: x, y: y))
+                    context?.addLine(to: CGPoint(x: x, y: y))
                 }
 
                 x += density
             }
 
-            context.strokePath()
+            context?.strokePath()
         }
     }
 }
