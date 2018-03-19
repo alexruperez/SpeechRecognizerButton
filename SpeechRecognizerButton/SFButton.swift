@@ -216,37 +216,41 @@ public class SFButton: UIButton {
     }
 
     public func checkRecordAuthorization(_ handler: ErrorClosure? = nil) {
-        guard Bundle.main.object(forInfoDictionaryKey: microphoneUsageDescriptionKey) != nil else {
-            queue.addOperation {
-                self.errorHandler?(.authorization(reason: .usageDescription(missing: self.microphoneUsageDescriptionKey)))
+        if Bundle.main.object(forInfoDictionaryKey: microphoneUsageDescriptionKey) != nil {
+            switch audioSession.recordPermission() {
+            case .granted: handler?(nil)
+            case .denied: handler?(.authorization(reason: .denied))
+            case .undetermined:
+                audioSession.requestRecordPermission({ _ in
+                    self.checkRecordAuthorization(handler)
+                })
             }
-            return
-        }
-        switch audioSession.recordPermission() {
-        case .granted: handler?(nil)
-        case .denied: handler?(.authorization(reason: .denied))
-        case .undetermined:
-            audioSession.requestRecordPermission({ _ in
-                self.checkRecordAuthorization(handler)
-            })
+        } else {
+            let error = SFButtonError.authorization(reason: .usageDescription(missing: self.microphoneUsageDescriptionKey))
+            queue.addOperation {
+                self.errorHandler?(error)
+            }
+            handler?(error)
         }
     }
 
     public func checkSpeechRecognizerAuthorization(_ handler: ErrorClosure? = nil) {
-        guard Bundle.main.object(forInfoDictionaryKey: speechRecognitionUsageDescriptionKey) != nil else {
+        if Bundle.main.object(forInfoDictionaryKey: speechRecognitionUsageDescriptionKey) != nil {
+            switch SFSpeechRecognizer.authorizationStatus() {
+            case .authorized: handler?(nil)
+            case .denied: handler?(.authorization(reason: .denied))
+            case .restricted: handler?(.authorization(reason: .restricted))
+            case .notDetermined:
+                SFSpeechRecognizer.requestAuthorization { _ in
+                    self.checkSpeechRecognizerAuthorization(handler)
+                }
+            }
+        } else {
+            let error = SFButtonError.authorization(reason: .usageDescription(missing: self.speechRecognitionUsageDescriptionKey))
             queue.addOperation {
-                self.errorHandler?(.authorization(reason: .usageDescription(missing: self.speechRecognitionUsageDescriptionKey)))
+                self.errorHandler?(error)
             }
-            return
-        }
-        switch SFSpeechRecognizer.authorizationStatus() {
-        case .authorized: handler?(nil)
-        case .denied: handler?(.authorization(reason: .denied))
-        case .restricted: handler?(.authorization(reason: .restricted))
-        case .notDetermined:
-            SFSpeechRecognizer.requestAuthorization { _ in
-                self.checkSpeechRecognizerAuthorization(handler)
-            }
+            handler?(error)
         }
     }
 
