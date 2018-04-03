@@ -1,3 +1,8 @@
+# Release 0.1.3
+
+- [x] shouldHideWaveform IBInspectable property.
+- [x] play(updatingWaveform: Bool) method.
+
 # Release 0.1.2
 
 - [x] Custom usage description authorization error handling.

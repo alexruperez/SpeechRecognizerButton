@@ -48,6 +48,7 @@ public class SFButton: UIButton {
     public var queue = OperationQueue.main
     public var contextualStrings = [String]()
     public var interactionIdentifier: String?
+    @IBInspectable public var shouldHideWaveform: Bool = true
     @IBInspectable public var animationDuration: Double = 0.5
     @IBInspectable public var shouldVibrate: Bool = true
     @IBInspectable public var shouldSound: Bool = true
@@ -55,7 +56,8 @@ public class SFButton: UIButton {
 
     private var audioPlayer: AVAudioPlayer?
     private var audioRecorder: AVAudioRecorder?
-    private var displayLink: CADisplayLink?
+    private var audioPlayerDisplayLink: CADisplayLink?
+    private var audioRecorderDisplayLink: CADisplayLink?
     private var speechRecognizer: SFSpeechRecognizer?
     private var speechRecognitionTask: SFSpeechRecognitionTask?
     private let microphoneUsageDescriptionKey = UsageDescriptionKey("NSMicrophoneUsageDescription")
@@ -83,7 +85,8 @@ public class SFButton: UIButton {
     }
 
     deinit {
-        displayLink?.invalidate()
+        audioRecorderDisplayLink?.invalidate()
+        audioPlayerDisplayLink?.invalidate()
     }
 
     @objc private func touchDown(_ sender: Any? = nil) {
@@ -129,16 +132,16 @@ public class SFButton: UIButton {
         try? audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
         try? audioSession.setActive(true)
         audioRecorder?.record(forDuration: maxDuration)
-        if displayLink == nil {
-            displayLink = CADisplayLink(target: self, selector: #selector(self.updateMeters(_:)))
-            displayLink?.add(to: .current, forMode: .commonModes)
+        if audioRecorderDisplayLink == nil {
+            audioRecorderDisplayLink = CADisplayLink(target: self, selector: #selector(self.updateRecorder(_:)))
+            audioRecorderDisplayLink?.add(to: .current, forMode: .commonModes)
         }
-        displayLink?.isPaused = false
+        audioRecorderDisplayLink?.isPaused = false
         waveformView(show: true, animationDuration: self.animationDuration)
     }
 
     private func endRecord() {
-        displayLink?.isPaused = true
+        audioRecorderDisplayLink?.isPaused = true
         audioRecorder?.stop()
         waveformView(show: false, animationDuration: animationDuration)
         try? audioSession.setCategory(AVAudioSessionCategoryPlayback)
@@ -152,18 +155,29 @@ public class SFButton: UIButton {
     }
 
     open func waveformView(show: Bool, animationDuration: TimeInterval) {
-        if animationDuration > 0 {
-            UIView.animate(withDuration: animationDuration, animations: {
-                self.waveformView?.alpha = show ? 1 : 0
-            })
-        } else {
-            waveformView?.alpha = show ? 1 : 0
+        if shouldHideWaveform {
+            if animationDuration > 0 {
+                UIView.animate(withDuration: animationDuration, animations: {
+                    self.waveformView?.alpha = show ? 1 : 0
+                })
+            } else {
+                waveformView?.alpha = show ? 1 : 0
+            }
         }
     }
 
-    @objc private func updateMeters(_ sender: Any? = nil) {
+    @objc private func updateRecorder(_ sender: Any? = nil) {
         audioRecorder?.updateMeters()
         guard let averagePower = audioRecorder?.averagePower(forChannel: 0) else {
+            return
+        }
+        let normalizedValue = pow(10, averagePower / 20)
+        waveformView?.updateWithLevel(CGFloat(normalizedValue))
+    }
+
+    @objc private func updatePlayer(_ sender: Any? = nil) {
+        audioPlayer?.updateMeters()
+        guard let averagePower = audioPlayer?.averagePower(forChannel: 0) else {
             return
         }
         let normalizedValue = pow(10, averagePower / 20)
@@ -187,7 +201,7 @@ public class SFButton: UIButton {
         }
     }
 
-    public func play() {
+    public func play(updatingWaveform: Bool = true) {
         guard FileManager.default.fileExists(atPath: recordURL.path) else {
             queue.addOperation {
                 self.errorHandler?(.cancelled(reason: .notFound))
@@ -197,6 +211,7 @@ public class SFButton: UIButton {
         do {
             audioPlayer = try AVAudioPlayer(contentsOf: recordURL)
             audioPlayer?.delegate = self
+            audioPlayer?.isMeteringEnabled = true
             try self.audioSession.setCategory(AVAudioSessionCategoryPlayback)
             try self.audioSession.setActive(true)
         } catch {
@@ -205,6 +220,14 @@ public class SFButton: UIButton {
             }
         }
         audioPlayer?.play()
+        if updatingWaveform {
+            if audioPlayerDisplayLink == nil {
+                audioPlayerDisplayLink = CADisplayLink(target: self, selector: #selector(self.updatePlayer(_:)))
+                audioPlayerDisplayLink?.add(to: .current, forMode: .commonModes)
+            }
+            audioPlayerDisplayLink?.isPaused = false
+            waveformView(show: true, animationDuration: self.animationDuration)
+        }
     }
 
     public func openSettings(_ completion: BoolClosure? = nil) {
@@ -260,6 +283,8 @@ extension SFButton: AVAudioPlayerDelegate {
 
     public func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         do {
+            audioPlayerDisplayLink?.isPaused = true
+            waveformView(show: false, animationDuration: animationDuration)
             try self.audioSession.setActive(false, with: .notifyOthersOnDeactivation)
         } catch {
             queue.addOperation {
@@ -270,6 +295,8 @@ extension SFButton: AVAudioPlayerDelegate {
 
     public func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
         do {
+            audioPlayerDisplayLink?.isPaused = true
+            waveformView(show: false, animationDuration: animationDuration)
             try self.audioSession.setActive(false, with: .notifyOthersOnDeactivation)
         } catch {
             queue.addOperation {
