@@ -20,12 +20,12 @@ class ExampleUITests: XCTestCase {
     }
     
     func testButton() {
-        app.buttons["Button"].press(forDuration: duration)
+        app.buttons.firstMatch.press(forDuration: duration)
         sleep(UInt32(duration))
     }
 
     func testButtonThenDrag() {
-        app.buttons["Button"].press(forDuration: duration, thenDragTo: app.otherElements.firstMatch)
+        app.buttons.firstMatch.press(forDuration: duration, thenDragTo: app.otherElements.firstMatch)
         sleep(UInt32(duration))
     }
     
