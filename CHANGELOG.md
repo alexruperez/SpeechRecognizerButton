@@ -1,3 +1,13 @@
+# Release 0.1.4
+
+- [x] cornerRadius IBInspectable property.
+- [x] borderColor IBInspectable property.
+- [x] borderWidth IBInspectable property.
+- [x] selectedColor IBInspectable property.
+- [x] highlightedColor IBInspectable property.
+- [x] disabledColor IBInspectable property.
+- [x] highlightedAlpha IBInspectable property.
+
 # Release 0.1.3
 
 - [x] shouldHideWaveform IBInspectable property.

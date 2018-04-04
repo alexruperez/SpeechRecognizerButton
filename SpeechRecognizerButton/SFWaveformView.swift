@@ -12,7 +12,7 @@ import Darwin
 let pi = Double.pi
 
 @IBDesignable
-public class SFWaveformView: UIView {
+open class SFWaveformView: UIView {
     fileprivate(set) var _phase: CGFloat = 0.0
     fileprivate(set) var _amplitude: CGFloat = 0.3
 
@@ -37,7 +37,7 @@ public class SFWaveformView: UIView {
         setNeedsDisplay()
     }
 
-    override public func draw(_ rect: CGRect) {
+    override open func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
         context?.clear(bounds)
 
@@ -82,4 +82,5 @@ public class SFWaveformView: UIView {
             context?.strokePath()
         }
     }
+
 }

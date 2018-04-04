@@ -12,7 +12,7 @@ import Speech
 import AudioToolbox
 
 @IBDesignable
-public class SFButton: UIButton {
+open class SFButton: UIButton {
 
     public enum SFButtonError: Error {
         public enum AuthorizationReason {
@@ -53,6 +53,13 @@ public class SFButton: UIButton {
     @IBInspectable public var shouldVibrate: Bool = true
     @IBInspectable public var shouldSound: Bool = true
     @IBOutlet public weak var waveformView: SFWaveformView?
+    @IBInspectable public var cornerRadius: CGFloat = 0
+    @IBInspectable public var borderColor: UIColor = .black
+    @IBInspectable public var borderWidth: CGFloat = 0
+    @IBInspectable public var selectedColor: UIColor?
+    @IBInspectable public var highlightedColor: UIColor?
+    @IBInspectable public var disabledColor: UIColor?
+    @IBInspectable public var highlightedAlpha: CGFloat = 0.5
 
     private var audioPlayer: AVAudioPlayer?
     private var audioRecorder: AVAudioRecorder?
@@ -62,6 +69,7 @@ public class SFButton: UIButton {
     private var speechRecognitionTask: SFSpeechRecognitionTask?
     private let microphoneUsageDescriptionKey = UsageDescriptionKey("NSMicrophoneUsageDescription")
     private let speechRecognitionUsageDescriptionKey = UsageDescriptionKey("NSSpeechRecognitionUsageDescription")
+    private var defaultColor: UIColor?
 
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -77,11 +85,30 @@ public class SFButton: UIButton {
         addTarget(self, action: #selector(self.touchDown(_:)), for: .touchDown)
         addTarget(self, action: #selector(self.touchUpInside(_:)), for: .touchUpInside)
         addTarget(self, action: #selector(self.touchUpOutside(_:)), for: .touchUpOutside)
+        defaultColor = backgroundColor
     }
 
-    public override func draw(_ rect: CGRect) {
+    open override func draw(_ rect: CGRect) {
         super.draw(rect)
         waveformView(show: false, animationDuration: 0)
+    }
+
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.cornerRadius = cornerRadius
+        layer.masksToBounds = cornerRadius > 0
+        layer.borderColor = borderColor.cgColor
+        layer.borderWidth = borderWidth
+        if let selectedColor = selectedColor, isSelected {
+            backgroundColor = selectedColor
+        } else if let highlightedColor = highlightedColor, isHighlighted {
+            backgroundColor = highlightedColor
+        } else if let disabledColor = disabledColor, !isEnabled {
+            backgroundColor = disabledColor
+        } else if let defaultColor = defaultColor {
+            backgroundColor = isHighlighted ? defaultColor.withAlphaComponent(highlightedAlpha) : defaultColor
+        }
+
     }
 
     deinit {
