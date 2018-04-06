@@ -1,3 +1,9 @@
+# Release 0.1.5
+
+- [x] pushToTalk IBInspectable property.
+- [x] cancelOnDrag IBInspectable property.
+- [x] activityIndicatorView IBOutlet property.
+
 # Release 0.1.4
 
 - [x] cornerRadius IBInspectable property.

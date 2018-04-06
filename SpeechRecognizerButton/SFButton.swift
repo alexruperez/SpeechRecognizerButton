@@ -48,11 +48,14 @@ open class SFButton: UIButton {
     public var queue = OperationQueue.main
     public var contextualStrings = [String]()
     public var interactionIdentifier: String?
+    @IBInspectable public var pushToTalk: Bool = true
+    @IBInspectable public var cancelOnDrag: Bool = true
     @IBInspectable public var shouldHideWaveform: Bool = true
     @IBInspectable public var animationDuration: Double = 0.5
     @IBInspectable public var shouldVibrate: Bool = true
     @IBInspectable public var shouldSound: Bool = true
     @IBOutlet public weak var waveformView: SFWaveformView?
+    @IBOutlet public weak var activityIndicatorView: UIActivityIndicatorView?
     @IBInspectable public var cornerRadius: CGFloat = 0
     @IBInspectable public var borderColor: UIColor = .black
     @IBInspectable public var borderWidth: CGFloat = 0
@@ -86,10 +89,6 @@ open class SFButton: UIButton {
         addTarget(self, action: #selector(self.touchUpInside(_:)), for: .touchUpInside)
         addTarget(self, action: #selector(self.touchUpOutside(_:)), for: .touchUpOutside)
         defaultColor = backgroundColor
-    }
-
-    open override func draw(_ rect: CGRect) {
-        super.draw(rect)
         waveformView(show: false, animationDuration: 0)
     }
 
@@ -117,41 +116,46 @@ open class SFButton: UIButton {
     }
 
     @objc private func touchDown(_ sender: Any? = nil) {
-        checkRecordAuthorization {
-            if let error = $0 {
-                self.queue.addOperation {
-                    self.handleAuthorizationError(error, self.authorizationErrorHandling)
-                }
-            } else {
-                if self.audioRecorder == nil {
-                    do {
-                        self.audioRecorder = try AVAudioRecorder(url: self.recordURL, settings: self.audioFormatSettings)
-                    } catch {
-                        self.queue.addOperation {
-                            self.errorHandler?(.unknown(error: error))
-                        }
+        if pushToTalk || !(audioRecorder?.isRecording == true) {
+            checkRecordAuthorization {
+                if let error = $0 {
+                    self.queue.addOperation {
+                        self.handleAuthorizationError(error, self.authorizationErrorHandling)
                     }
-                    self.audioRecorder?.delegate = self
-                    self.audioRecorder?.isMeteringEnabled = true
-                    self.audioRecorder?.prepareToRecord()
-                }
-                OperationQueue.main.addOperation {
-                    if self.audioRecorder?.isRecording == false, self.isHighlighted {
-                        if self.shouldVibrate {
-                            AudioServicesPlaySystemSound(1519)
+                } else {
+                    if self.audioRecorder == nil {
+                        do {
+                            self.audioRecorder = try AVAudioRecorder(url: self.recordURL, settings: self.audioFormatSettings)
+                        } catch {
+                            self.queue.addOperation {
+                                self.errorHandler?(.unknown(error: error))
+                            }
                         }
-                        if self.shouldSound {
-                            AudioServicesPlaySystemSoundWithCompletion(1113, {
-                                OperationQueue.main.addOperation {
-                                    self.beginRecord()
-                                }
-                            })
-                        } else {
-                            self.beginRecord()
+                        self.audioRecorder?.delegate = self
+                        self.audioRecorder?.isMeteringEnabled = true
+                        self.audioRecorder?.prepareToRecord()
+                    }
+                    OperationQueue.main.addOperation {
+                        if self.audioRecorder?.isRecording == false, self.isHighlighted {
+                            if self.shouldVibrate {
+                                AudioServicesPlaySystemSound(1519)
+                            }
+                            if self.shouldSound {
+                                AudioServicesPlaySystemSoundWithCompletion(1113, {
+                                    OperationQueue.main.addOperation {
+                                        self.beginRecord()
+                                    }
+                                })
+                            } else {
+                                self.beginRecord()
+                            }
                         }
                     }
                 }
             }
+        } else {
+            endRecord()
+            isSelected = false
         }
     }
 
@@ -159,6 +163,9 @@ open class SFButton: UIButton {
         try? audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
         try? audioSession.setActive(true)
         audioRecorder?.record(forDuration: maxDuration)
+        if !pushToTalk {
+            isSelected = true
+        }
         if audioRecorderDisplayLink == nil {
             audioRecorderDisplayLink = CADisplayLink(target: self, selector: #selector(self.updateRecorder(_:)))
             audioRecorderDisplayLink?.add(to: .current, forMode: .commonModes)
@@ -212,12 +219,16 @@ open class SFButton: UIButton {
     }
 
     @objc private func touchUpInside(_ sender: Any? = nil) {
-        endRecord()
+        if pushToTalk {
+            endRecord()
+        }
     }
 
     @objc private func touchUpOutside(_ sender: Any? = nil) {
-        endRecord()
-        audioRecorder?.deleteRecording()
+        if pushToTalk, cancelOnDrag {
+            endRecord()
+            audioRecorder?.deleteRecording()
+        }
     }
 
     private func handleAuthorizationError(_ error: SFButtonError, _ handling: AuthorizationErrorHandling) {
@@ -348,9 +359,11 @@ extension SFButton: AVAudioRecorderDelegate {
             }
         }
         if flag {
+            activityIndicatorView?.startAnimating()
             checkSpeechRecognizerAuthorization {
                 if let error = $0 {
                     self.queue.addOperation {
+                        self.activityIndicatorView?.stopAnimating()
                         self.resultHandler?(self.recordURL, nil)
                         self.handleAuthorizationError(error, self.authorizationErrorHandling)
                     }
@@ -358,6 +371,7 @@ extension SFButton: AVAudioRecorderDelegate {
                     if self.speechRecognizer == nil {
                         guard let speechRecognizer = SFSpeechRecognizer(locale: self.locale) else {
                             self.queue.addOperation {
+                                self.activityIndicatorView?.stopAnimating()
                                 self.resultHandler?(self.recordURL, nil)
                                 self.errorHandler?(.invalid(locale: self.locale))
                             }
@@ -369,6 +383,7 @@ extension SFButton: AVAudioRecorderDelegate {
                     }
                     guard self.speechRecognizer?.isAvailable == true else {
                         self.queue.addOperation {
+                            self.activityIndicatorView?.stopAnimating()
                             self.resultHandler?(self.recordURL, nil)
                             self.errorHandler?(.notAvailable)
                         }
@@ -387,11 +402,13 @@ extension SFButton: AVAudioRecorderDelegate {
                         self.speechRecognitionTask = self.speechRecognizer?.recognitionTask(with: speechRecognitionRequest, resultHandler: { result, error in
                             if let result = result, result.isFinal {
                                 self.queue.addOperation {
+                                    self.activityIndicatorView?.stopAnimating()
                                     self.resultHandler?(self.recordURL, result)
                                 }
                                 self.speechRecognitionTask = nil
                             } else if let error = error {
                                 self.queue.addOperation {
+                                    self.activityIndicatorView?.stopAnimating()
                                     self.resultHandler?(self.recordURL, nil)
                                     self.errorHandler?(.unknown(error: error))
                                 }

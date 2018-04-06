@@ -19,8 +19,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2lT-wx-Vzq">
+                                <rect key="frame" x="166" y="282" width="42" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jk2-hB-Uh3" customClass="SFButton" customModule="SpeechRecognizerButton">
-                                <rect key="frame" x="164" y="310.5" width="46" height="46"/>
+                                <rect key="frame" x="164" y="310" width="46" height="46"/>
                                 <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="jk2-hB-Uh3" secondAttribute="height" multiplier="1:1" id="Qs7-tj-BVZ"/>
@@ -41,15 +47,10 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
+                                    <outlet property="activityIndicatorView" destination="XGR-os-4gk" id="lR5-An-1ux"/>
                                     <outlet property="waveformView" destination="O8X-9j-l5M" id="gIB-4u-bOM"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2lT-wx-Vzq">
-                                <rect key="frame" x="166" y="282" width="42" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O8X-9j-l5M" customClass="SFWaveformView" customModule="SpeechRecognizerButton">
                                 <rect key="frame" x="0.0" y="364.5" width="375" height="128"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -57,6 +58,10 @@
                                     <constraint firstAttribute="height" constant="128" id="057-2H-aLB"/>
                                 </constraints>
                             </view>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="XGR-os-4gk">
+                                <rect key="frame" x="177" y="323" width="20" height="20"/>
+                                <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
@@ -66,8 +71,10 @@
                             <constraint firstItem="jk2-hB-Uh3" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="BM4-z8-fOf"/>
                             <constraint firstItem="jk2-hB-Uh3" firstAttribute="top" secondItem="2lT-wx-Vzq" secondAttribute="bottom" constant="8" id="Bri-Ob-cDy"/>
                             <constraint firstItem="2lT-wx-Vzq" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" priority="750" constant="8" id="Fmp-LL-1dc"/>
+                            <constraint firstItem="XGR-os-4gk" firstAttribute="centerY" secondItem="jk2-hB-Uh3" secondAttribute="centerY" id="Pbq-fg-TP5"/>
                             <constraint firstItem="jk2-hB-Uh3" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="VCO-pQ-UgO"/>
                             <constraint firstItem="2lT-wx-Vzq" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="W3s-5H-AxB"/>
+                            <constraint firstItem="XGR-os-4gk" firstAttribute="centerX" secondItem="jk2-hB-Uh3" secondAttribute="centerX" id="YQc-QC-Mbl"/>
                             <constraint firstItem="O8X-9j-l5M" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="rCs-ZG-x3D"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="2lT-wx-Vzq" secondAttribute="trailing" priority="750" constant="8" id="znr-Iw-ODZ"/>
                         </constraints>
