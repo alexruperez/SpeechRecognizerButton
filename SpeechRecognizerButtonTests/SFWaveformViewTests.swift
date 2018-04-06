@@ -26,7 +26,7 @@ class SFWaveformViewTests: XCTestCase {
     }
     
     func testWaveformViewAlpha() {
-        button.draw(.zero)
+        button.awakeFromNib()
         XCTAssertEqual(waveformView.alpha, 0)
     }
 

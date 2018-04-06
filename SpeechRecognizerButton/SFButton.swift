@@ -89,6 +89,10 @@ open class SFButton: UIButton {
         addTarget(self, action: #selector(self.touchUpInside(_:)), for: .touchUpInside)
         addTarget(self, action: #selector(self.touchUpOutside(_:)), for: .touchUpOutside)
         defaultColor = backgroundColor
+    }
+
+    open override func awakeFromNib() {
+        super.awakeFromNib()
         waveformView(show: false, animationDuration: 0)
     }
 
