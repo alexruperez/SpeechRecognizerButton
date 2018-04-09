@@ -229,9 +229,11 @@ open class SFButton: UIButton {
     }
 
     @objc private func touchUpOutside(_ sender: Any? = nil) {
-        if pushToTalk, cancelOnDrag {
+        if pushToTalk {
             endRecord()
-            audioRecorder?.deleteRecording()
+            if cancelOnDrag {
+                audioRecorder?.deleteRecording()
+            }
         }
     }
 
