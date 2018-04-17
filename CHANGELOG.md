@@ -1,3 +1,7 @@
+# Release 0.1.6
+
+- [x] speechRecognition IBInspectable property.
+
 # Release 0.1.5
 
 - [x] pushToTalk IBInspectable property.

@@ -49,6 +49,7 @@ open class SFButton: UIButton {
     public var contextualStrings = [String]()
     public var interactionIdentifier: String?
     @IBInspectable public var pushToTalk: Bool = true
+    @IBInspectable public var speechRecognition: Bool = true
     @IBInspectable public var cancelOnDrag: Bool = true
     @IBInspectable public var shouldHideWaveform: Bool = true
     @IBInspectable public var animationDuration: Double = 0.5
@@ -303,14 +304,18 @@ open class SFButton: UIButton {
 
     public func checkSpeechRecognizerAuthorization(_ handler: ErrorClosure? = nil) {
         if Bundle.main.object(forInfoDictionaryKey: speechRecognitionUsageDescriptionKey) != nil {
-            switch SFSpeechRecognizer.authorizationStatus() {
-            case .authorized: handler?(nil)
-            case .denied: handler?(.authorization(reason: .denied))
-            case .restricted: handler?(.authorization(reason: .restricted))
-            case .notDetermined:
-                SFSpeechRecognizer.requestAuthorization { _ in
-                    self.checkSpeechRecognizerAuthorization(handler)
+            if speechRecognition {
+                switch SFSpeechRecognizer.authorizationStatus() {
+                case .authorized: handler?(nil)
+                case .denied: handler?(.authorization(reason: .denied))
+                case .restricted: handler?(.authorization(reason: .restricted))
+                case .notDetermined:
+                    SFSpeechRecognizer.requestAuthorization { _ in
+                        self.checkSpeechRecognizerAuthorization(handler)
+                    }
                 }
+            } else {
+                handler?(nil)
             }
         } else {
             let error = SFButtonError.authorization(reason: .usageDescription(missing: self.speechRecognitionUsageDescriptionKey))
@@ -373,7 +378,7 @@ extension SFButton: AVAudioRecorderDelegate {
                         self.resultHandler?(self.recordURL, nil)
                         self.handleAuthorizationError(error, self.authorizationErrorHandling)
                     }
-                } else {
+                } else if self.speechRecognition {
                     if self.speechRecognizer == nil {
                         guard let speechRecognizer = SFSpeechRecognizer(locale: self.locale) else {
                             self.queue.addOperation {
@@ -421,6 +426,11 @@ extension SFButton: AVAudioRecorderDelegate {
                                 self.speechRecognitionTask = nil
                             }
                         })
+                    }
+                } else {
+                    self.queue.addOperation {
+                        self.activityIndicatorView?.stopAnimating()
+                        self.resultHandler?(self.recordURL, nil)
                     }
                 }
             }
