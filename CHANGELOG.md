@@ -1,3 +1,7 @@
+# Release 0.1.7
+
+- [x] Ready to Swift 4.
+
 # Release 0.1.6
 
 - [x] speechRecognition IBInspectable property.
