@@ -165,7 +165,7 @@ open class SFButton: UIButton {
     }
 
     private func beginRecord() {
-        try? audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord, mode: AVAudioSessionModeSpokenAudio, options: .interruptSpokenAudioAndMixWithOthers)
+        try? audioSession.setCategory(AVAudioSession.Category.playAndRecord, mode: .spokenAudio, options: .interruptSpokenAudioAndMixWithOthers)
         try? audioSession.setActive(true)
         audioRecorder?.record(forDuration: maxDuration)
         if !pushToTalk {
@@ -173,7 +173,7 @@ open class SFButton: UIButton {
         }
         if audioRecorderDisplayLink == nil {
             audioRecorderDisplayLink = CADisplayLink(target: self, selector: #selector(self.updateRecorder(_:)))
-            audioRecorderDisplayLink?.add(to: .current, forMode: .commonModes)
+            audioRecorderDisplayLink?.add(to: .current, forMode: RunLoop.Mode.common)
         }
         audioRecorderDisplayLink?.isPaused = false
         waveformView(show: true, animationDuration: animationDuration)
@@ -183,7 +183,7 @@ open class SFButton: UIButton {
         audioRecorderDisplayLink?.isPaused = true
         audioRecorder?.stop()
         waveformView(show: false, animationDuration: animationDuration)
-        try? audioSession.setCategory(AVAudioSessionCategoryPlayback)
+        try? audioSession.setCategory(.playback, mode: .default)
         try? audioSession.setActive(true)
         if shouldVibrate {
             AudioServicesPlaySystemSound(1519)
@@ -257,7 +257,7 @@ open class SFButton: UIButton {
             audioPlayer = try AVAudioPlayer(contentsOf: recordURL)
             audioPlayer?.delegate = self
             audioPlayer?.isMeteringEnabled = true
-            try audioSession.setCategory(AVAudioSessionCategoryPlayback)
+            try audioSession.setCategory(.playback, mode: .default)
             try audioSession.setActive(true)
         } catch {
             queue.addOperation {
@@ -268,7 +268,7 @@ open class SFButton: UIButton {
         if updatingWaveform {
             if audioPlayerDisplayLink == nil {
                 audioPlayerDisplayLink = CADisplayLink(target: self, selector: #selector(self.updatePlayer(_:)))
-                audioRecorderDisplayLink?.add(to: .current, forMode: .commonModes)
+                audioRecorderDisplayLink?.add(to: .current, forMode: RunLoop.Mode.common)
             }
             audioPlayerDisplayLink?.isPaused = false
             waveformView(show: true, animationDuration: animationDuration)
@@ -276,7 +276,7 @@ open class SFButton: UIButton {
     }
 
     public func openSettings(_ completion: BoolClosure? = nil) {
-        if let url = URL(string: UIApplicationOpenSettingsURLString) {
+        if let url = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(url, completionHandler: completion)
         } else {
             completion?(false)
@@ -285,7 +285,7 @@ open class SFButton: UIButton {
 
     public func checkRecordAuthorization(_ handler: ErrorClosure? = nil) {
         if Bundle.main.object(forInfoDictionaryKey: microphoneUsageDescriptionKey) != nil {
-            switch audioSession.recordPermission() {
+            switch audioSession.recordPermission {
             case .granted: handler?(nil)
             case .denied: handler?(.authorization(reason: .denied))
             case .undetermined:
@@ -334,7 +334,7 @@ extension SFButton: AVAudioPlayerDelegate {
         do {
             audioPlayerDisplayLink?.isPaused = true
             waveformView(show: false, animationDuration: animationDuration)
-            try audioSession.setActive(false, with: .notifyOthersOnDeactivation)
+            try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
         } catch {
             queue.addOperation {
                 self.errorHandler?(.unknown(error: error))
@@ -346,7 +346,7 @@ extension SFButton: AVAudioPlayerDelegate {
         do {
             audioPlayerDisplayLink?.isPaused = true
             waveformView(show: false, animationDuration: animationDuration)
-            try audioSession.setActive(false, with: .notifyOthersOnDeactivation)
+            try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
         } catch {
             queue.addOperation {
                 self.errorHandler?(.unknown(error: error))
@@ -363,7 +363,7 @@ extension SFButton: AVAudioRecorderDelegate {
 
     public func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         do {
-            try self.audioSession.setActive(false, with: .notifyOthersOnDeactivation)
+            try self.audioSession.setActive(false, options: .notifyOthersOnDeactivation)
         } catch {
             queue.addOperation {
                 self.errorHandler?(.unknown(error: error))
@@ -443,7 +443,7 @@ extension SFButton: AVAudioRecorderDelegate {
 
     public func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
         do {
-            try audioSession.setActive(false, with: .notifyOthersOnDeactivation)
+            try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
         } catch {
             queue.addOperation {
                 self.errorHandler?(.unknown(error: error))
