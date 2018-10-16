@@ -1,3 +1,7 @@
+# Release 0.1.8
+
+- [x] Ready to Swift 4.2. Thanks [@SpectralDragon](https://github.com/SpectralDragon)!
+
 # Release 0.1.7
 
 - [x] Ready to Swift 4.
