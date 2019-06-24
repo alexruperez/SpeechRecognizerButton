@@ -43,7 +43,13 @@ open class SFButton: UIButton {
                                                       AVNumberOfChannelsKey: 1,
                                                       AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
     @IBInspectable public var maxDuration: Double = 60
-    public var locale = Locale.autoupdatingCurrent
+    public var locale = Locale.autoupdatingCurrent {
+        didSet {
+            if oldValue != locale {
+                speechRecognizer = nil
+            }
+        }
+    }
     public var taskHint = SFSpeechRecognitionTaskHint.unspecified
     public var queue = OperationQueue.main
     public var contextualStrings = [String]()
