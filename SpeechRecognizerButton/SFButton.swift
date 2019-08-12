@@ -48,6 +48,7 @@ open class SFButton: UIButton {
     public var queue = OperationQueue.main
     public var contextualStrings = [String]()
     public var interactionIdentifier: String?
+    @IBInspectable public var autoStop: Bool = true
     @IBInspectable public var pushToTalk: Bool = true
     @IBInspectable public var speechRecognition: Bool = true
     @IBInspectable public var cancelOnDrag: Bool = true
@@ -64,7 +65,8 @@ open class SFButton: UIButton {
     @IBInspectable public var highlightedColor: UIColor?
     @IBInspectable public var disabledColor: UIColor?
     @IBInspectable public var highlightedAlpha: CGFloat = 0.5
-
+    
+    private var counter:NSInteger = 0
     private var audioPlayer: AVAudioPlayer?
     private var audioRecorder: AVAudioRecorder?
     fileprivate var audioPlayerDisplayLink: CADisplayLink?
@@ -177,6 +179,7 @@ open class SFButton: UIButton {
         }
         audioRecorderDisplayLink?.isPaused = false
         waveformView(show: true, animationDuration: animationDuration)
+        counter = 0
     }
 
     private func endRecord() {
@@ -212,6 +215,16 @@ open class SFButton: UIButton {
         }
         let normalizedValue = pow(10, averagePower / 20)
         waveformView?.updateWithLevel(CGFloat(normalizedValue))
+        
+        if(averagePower < -10){
+            counter += 1
+            if(counter / 60 >= 2){
+                endRecord()
+            }
+        }
+        else{
+            counter = 0
+        }
     }
 
     @objc private func updatePlayer(_ sender: Any? = nil) {
