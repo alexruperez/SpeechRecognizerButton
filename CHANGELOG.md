@@ -1,3 +1,9 @@
+# Release 0.2.0
+
+- [x] Added auto stop. Thanks [@Jiawen-Zhang](https://github.com/Jiawen-Zhang)!
+- [x] Reset speech recognizer when changing locale. Thanks [@johnjcamilleri](https://github.com/johnjcamilleri)!
+- [x] Ready to Swift 5.0.
+
 # Release 0.1.8
 
 - [x] Ready to Swift 4.2. Thanks [@SpectralDragon](https://github.com/SpectralDragon)!

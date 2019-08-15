@@ -43,12 +43,13 @@ open class SFButton: UIButton {
                                                       AVNumberOfChannelsKey: 1,
                                                       AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
     @IBInspectable public var maxDuration: Double = 60
-    public var locale = Locale.autoupdatingCurrent
+    public var locale = Locale.autoupdatingCurrent { willSet { speechRecognizer = nil } }
     public var taskHint = SFSpeechRecognitionTaskHint.unspecified
     public var queue = OperationQueue.main
     public var contextualStrings = [String]()
     public var interactionIdentifier: String?
-    @IBInspectable public var autoStop: Bool = true
+    @IBInspectable public var autoStopTime: UInt = 120
+    @IBInspectable public var autoStopPower: Float = -10
     @IBInspectable public var pushToTalk: Bool = true
     @IBInspectable public var speechRecognition: Bool = true
     @IBInspectable public var cancelOnDrag: Bool = true
@@ -66,7 +67,7 @@ open class SFButton: UIButton {
     @IBInspectable public var disabledColor: UIColor?
     @IBInspectable public var highlightedAlpha: CGFloat = 0.5
     
-    private var counter: NSInteger = 0
+    private var autoStopCounter: UInt = 0
     private var audioPlayer: AVAudioPlayer?
     private var audioRecorder: AVAudioRecorder?
     fileprivate var audioPlayerDisplayLink: CADisplayLink?
@@ -179,7 +180,7 @@ open class SFButton: UIButton {
         }
         audioRecorderDisplayLink?.isPaused = false
         waveformView(show: true, animationDuration: animationDuration)
-        counter = 0
+        autoStopCounter = 0
     }
 
     private func endRecord() {
@@ -216,13 +217,13 @@ open class SFButton: UIButton {
         let normalizedValue = pow(10, averagePower / 20)
         waveformView?.updateWithLevel(CGFloat(normalizedValue))
         
-        if (averagePower < -10) {
-            counter += 1
-            if (counter / 60 >= 2) {
+        if (averagePower < autoStopPower) {
+            autoStopCounter += 1
+            if (autoStopCounter >= autoStopTime) {
                 endRecord()
             }
         } else {
-            counter = 0
+            autoStopCounter = 0
         }
     }
 
@@ -300,7 +301,7 @@ open class SFButton: UIButton {
             switch audioSession.recordPermission {
             case .granted: handler?(nil)
             case .denied: handler?(.authorization(reason: .denied))
-            case .undetermined:
+            default:
                 audioSession.requestRecordPermission({ _ in
                     self.checkRecordAuthorization(handler)
                 })
@@ -321,7 +322,7 @@ open class SFButton: UIButton {
                 case .authorized: handler?(nil)
                 case .denied: handler?(.authorization(reason: .denied))
                 case .restricted: handler?(.authorization(reason: .restricted))
-                case .notDetermined:
+                default:
                     SFSpeechRecognizer.requestAuthorization { _ in
                         self.checkSpeechRecognizerAuthorization(handler)
                     }
