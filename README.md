@@ -4,7 +4,7 @@
 [![Version](https://img.shields.io/cocoapods/v/SpeechRecognizerButton.svg?style=flat)](http://cocoapods.org/pods/SpeechRecognizerButton)
 [![License](https://img.shields.io/cocoapods/l/SpeechRecognizerButton.svg?style=flat)](http://cocoapods.org/pods/SpeechRecognizerButton)
 [![Platform](https://img.shields.io/cocoapods/p/SpeechRecognizerButton.svg?style=flat)](http://cocoapods.org/pods/SpeechRecognizerButton)
-[![Swift](https://img.shields.io/badge/Swift-4-orange.svg?style=flat)](https://swift.org)
+[![Swift](https://img.shields.io/badge/Swift-5-orange.svg?style=flat)](https://swift.org)
 [![Build Status](https://travis-ci.org/alexruperez/SpeechRecognizerButton.svg?branch=master)](https://travis-ci.org/alexruperez/SpeechRecognizerButton)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Swift Package Manager Compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager)
